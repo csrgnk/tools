@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyword Generator Tool</title>
+    <style>
+        /* Shared Header Styles */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+        .header { background-color: #0073e6; padding: 15px 20px; text-align: center; }
+        .header .site-name { color: white; font-size: 24px; font-weight: bold; text-decoration: none; }
+        
+        /* Tool Specific Styles */
+        .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+        h2 { text-align: center; margin-bottom: 15px; color: #333; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+        
+        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        button { flex: 1; padding: 12px; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; color: white; transition: opacity 0.3s; }
+        .btn-gen { background: #16a34a; }
+        .btn-copy { background: #0073e6; }
+        button:hover { opacity: 0.9; }
+        
+        #output { 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            padding: 15px; 
+            min-height: 150px; 
+            background: white; 
+            white-space: pre-wrap; 
+            font-family: monospace;
+            line-height: 1.6;
+        }
+        
+        a#backHome { display: block; text-align: center; margin-top: 25px; text-decoration: none; color: #0073e6; font-weight: bold; }
+        a#backHome:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" class="site-name">CSR Tools</a>
+</div>
+
+<div class="container">
+    <h2>🔑 Keyword Generator</h2>
+
+    <input type="text" id="baseKeyword" placeholder="Enter base keyword or phrase (e.g. Yoga Mats)">
+    
+    <div class="btn-group">
+        <button class="btn-gen" onclick="generateKeywords()">Generate</button>
+        <button class="btn-copy" onclick="copyKeywords()">Copy Keywords</button>
+    </div>
+
+    <h3>Generated Keywords:</h3>
+    <div id="output"></div>
+
+    <a id="backHome" href="index.html">← Back to Home</a>
+</div>
+
+<script>
+function generateKeywords() {
+    let base = document.getElementById('baseKeyword').value.trim();
+    if(!base) return alert("Please enter a keyword!");
+    
+    let output = [];
+    // variations updated to 2026 for accuracy
+    let variations = ["buy", "cheap", "best", "review", "online", "2026", "tips", "how to", "near me"];
+    
+    variations.forEach(v => {
+        output.push(`${v} ${base}`);
+        output.push(`${base} ${v}`);
+    });
+    
+    // Add the base keyword alone
+    output.push(base);
+    
+    // Remove duplicates and join
+    let uniqueKeywords = [...new Set(output)];
+    document.getElementById('output').innerText = uniqueKeywords.join("\n");
+}
+
+function copyKeywords(){
+    const output = document.getElementById('output');
+    if(!output.innerText) return alert("No keywords to copy!");
+    
+    navigator.clipboard.writeText(output.innerText).then(() => {
+        alert("Keywords copied to clipboard!");
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}
+</script>
+
+</body>
+</html>
