@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keyword Generator - CSR Tools</title>
+    <title>Pure Keyword Generator - CSR Tools</title>
 
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             background: #f4f7f6;
-            color: #333;
         }
 
         .header {
@@ -20,18 +19,18 @@
             text-align: center;
         }
 
-        .header .site-name {
+        .header a {
             color: white;
             font-size: 22px;
-            font-weight: bold;
             text-decoration: none;
+            font-weight: bold;
         }
 
         .container {
             max-width: 800px;
             margin: 30px auto;
             padding: 25px;
-            background: white;
+            background: #fff;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
@@ -39,26 +38,18 @@
         h2 {
             text-align: center;
             color: #0073e6;
-            margin-top: 0;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
         }
 
         input {
             width: 100%;
             padding: 15px;
-            margin-bottom: 20px;
             border: 2px solid #ddd;
             border-radius: 8px;
+            margin-bottom: 20px;
             font-size: 16px;
         }
 
-        button#genBtn {
+        button {
             width: 100%;
             padding: 15px;
             background: #16a34a;
@@ -66,56 +57,43 @@
             border: none;
             border-radius: 8px;
             font-size: 18px;
-            font-weight: bold;
             cursor: pointer;
         }
 
-        button#genBtn:hover {
+        button:hover {
             background: #11863a;
         }
 
         .section-label {
-            margin-top: 30px;
+            margin-top: 25px;
             font-weight: bold;
             color: #0073e6;
             display: flex;
             justify-content: space-between;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
         }
 
         .copy-btn {
             background: #0073e6;
             color: white;
             border: none;
-            padding: 5px 12px;
+            padding: 5px 10px;
             border-radius: 4px;
+            font-size: 12px;
             cursor: pointer;
-            font-size: 11px;
         }
 
         .output-box {
             margin-top: 10px;
             padding: 15px;
             background: #f9f9f9;
-            border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 14px;
+            border: 1px solid #ddd;
             word-break: break-all;
         }
 
-        .meta-display {
+        .meta {
             font-family: monospace;
             color: #b91c1c;
-        }
-
-        #back {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-            text-decoration: none;
-            color: #888;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -123,82 +101,65 @@
 <body>
 
 <div class="header">
-    <a href="index.html" class="site-name">CSR Tools</a>
+    <a href="#">CSR Tools</a>
 </div>
 
 <div class="container">
-    <h2>🚀 Smart Keyword Generator</h2>
+    <h2>🎯 Pure Keyword Generator</h2>
 
-    <label>Enter Main Topic:</label>
-    <input type="text" id="userInput" placeholder="e.g., Vishnu Sahasra Namam">
+    <input type="text" id="userInput" placeholder="Enter your keyword...">
 
-    <button id="genBtn" onclick="processKeywords()">Generate Keywords</button>
-
-    <div class="section-label">
-        1. SEO Hashtags
-        <button class="copy-btn" onclick="copyValue('hashtagOutput')">Copy</button>
-    </div>
-    <div id="hashtagOutput" class="output-box"></div>
+    <button onclick="generate()">Generate</button>
 
     <div class="section-label">
-        2. Meta Keywords Tag
-        <button class="copy-btn" onclick="copyValue('metaOutput')">Copy</button>
+        Hashtags
+        <button class="copy-btn" onclick="copy('hashtags')">Copy</button>
     </div>
-    <div id="metaOutput" class="output-box meta-display"></div>
+    <div id="hashtags" class="output-box"></div>
 
-    <a id="back" href="index.html">← Back</a>
+    <div class="section-label">
+        Meta Tag
+        <button class="copy-btn" onclick="copy('meta')">Copy</button>
+    </div>
+    <div id="meta" class="output-box meta"></div>
 </div>
 
 <script>
-function processKeywords() {
-    let input = document.getElementById('userInput').value.trim();
-    if (!input) return alert("Please enter a topic!");
+function generate() {
+    let input = document.getElementById("userInput").value.trim();
+    if (!input) return alert("Enter keyword");
 
     let words = input.split(" ");
     let list = [];
 
-    // Base keyword
-    list.push(input);
+    // PURE formats only
+    list.push(input); // original
+    list.push(input.toLowerCase()); // small
+    list.push(input.toUpperCase()); // capital
 
-    // Case variations
-    list.push(input.toLowerCase());
-    list.push(input.toUpperCase());
-
-    // Combined formats
     if (words.length > 1) {
-        list.push(words.join(""));
-        list.push(words.join("-"));
+        list.push(words.join(""));   // no space
+        list.push(words.join("-"));  // dashed
     }
 
-    // Generic SEO patterns (pure logic, not forced keywords)
-    list.push("best " + input);
-    list.push(input + " guide");
-    list.push(input + " meaning");
-    list.push(input + " benefits");
-
-    // Remove duplicates
+    // remove duplicates
     list = [...new Set(list)];
 
-    // Hashtags
-    let hashtags = list.map(item => {
-        let clean = item.replace(/[^a-zA-Z0-9]/g, "");
-        return "#" + clean;
-    }).join(" ");
+    // hashtags
+    let tags = list.map(k => "#" + k.replace(/[^a-zA-Z0-9]/g, "")).join(" ");
+    document.getElementById("hashtags").innerText = tags;
 
-    document.getElementById('hashtagOutput').innerText = hashtags;
-
-    // Meta tag
-    let meta = `<meta name="keywords" content="${list.join(", ")}">`;
-    document.getElementById('metaOutput').innerText = meta;
+    // meta
+    document.getElementById("meta").innerText =
+        `<meta name="keywords" content="${list.join(", ")}">`;
 }
 
-function copyValue(id) {
-    const text = document.getElementById(id).innerText;
+function copy(id) {
+    let text = document.getElementById(id).innerText;
     if (!text) return;
 
-    navigator.clipboard.writeText(text).then(() => {
-        alert("Copied!");
-    });
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
 }
 </script>
 
