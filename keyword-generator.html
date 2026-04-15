@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keyword & Meta Generator - CSR Tools</title>
+    <title>Meta Keyword Generator - CSR Tools</title>
     <style>
         /* Shared Header Styles */
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
@@ -12,32 +12,31 @@
         
         .container { padding: 20px; max-width: 800px; margin: 0 auto; }
         h2 { text-align: center; margin-bottom: 15px; color: #333; }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
         
-        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        button { flex: 1; padding: 12px; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: bold; transition: 0.3s; }
-        .btn-gen { background: #16a34a; }
-        button:hover { opacity: 0.9; }
+        .input-group { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        label { font-weight: bold; display: block; margin-bottom: 8px; color: #555; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+        
+        button { width: 100%; padding: 12px; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: bold; background: #16a34a; transition: 0.3s; }
+        button:hover { background: #138b43; }
         
         /* Result Boxes */
         .result-section { margin-top: 20px; }
-        h3 { font-size: 16px; color: #0073e6; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .copy-link { font-size: 12px; background: #0073e6; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; text-decoration: none; }
+        h3 { font-size: 16px; color: #0073e6; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .copy-btn { font-size: 12px; background: #0073e6; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; border: none; }
 
         .output-box { 
             border: 1px solid #ccc; 
             border-radius: 6px; 
-            padding: 12px; 
-            min-height: 100px; 
-            max-height: 200px;
-            overflow-y: auto;
-            background: white; 
-            white-space: pre-wrap; 
-            font-family: monospace;
+            padding: 15px; 
+            min-height: 80px; 
+            background: #fff; 
+            word-break: break-all;
+            font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #d11010; /* Code-like red color for the tag */
+            margin-bottom: 25px;
         }
         
         a#backHome { display: block; text-align: center; margin-top: 25px; text-decoration: none; color: #0073e6; font-weight: bold; }
@@ -50,24 +49,18 @@
 </div>
 
 <div class="container">
-    <h2>🔑 Keyword & Meta Generator</h2>
+    <h2>🔑 Meta Keyword Generator</h2>
 
-    <input type="text" id="baseKeyword" placeholder="Enter base keyword (e.g. Namo Narayanaya)">
-    
-    <div class="btn-group">
-        <button class="btn-gen" onclick="generateKeywords()">Generate All Formats</button>
+    <div class="input-group">
+        <label>Enter Keyword or Phrase:</label>
+        <input type="text" id="baseKeyword" placeholder="e.g. Karunashtakalu">
+        <button onclick="generateMeta()">Generate Meta Tag</button>
     </div>
 
     <div class="result-section">
         <h3>
-            Standard List (One per line)
-            <span class="copy-link" onclick="copyText('listOutput')">Copy List</span>
-        </h3>
-        <div id="listOutput" class="output-box"></div>
-
-        <h3>
-            Meta Keywords (Comma separated)
-            <span class="copy-link" onclick="copyText('metaOutput')">Copy Meta Tags</span>
+            HTML Meta Tag Result:
+            <button class="copy-btn" onclick="copyMeta()">Copy Tag</button>
         </h3>
         <div id="metaOutput" class="output-box"></div>
     </div>
@@ -76,36 +69,34 @@
 </div>
 
 <script>
-function generateKeywords() {
+function generateMeta() {
     let base = document.getElementById('baseKeyword').value.trim();
     if(!base) return alert("Please enter a keyword!");
     
-    let variations = ["buy", "best", "review", "online", "2026", "tips", "latest", "free", "how to"];
+    // Custom variations for your bhakti channel
+    let variations = ["lyrics", "meaning", "bhakti", "stotram", "online", "2026", "namo narayanaya", "sangameshwar"];
     let results = [];
     
-    // Create combinations
     variations.forEach(v => {
-        results.push(`${v} ${base}`);
         results.push(`${base} ${v}`);
     });
     results.push(base);
     
-    // Remove duplicates
-    let uniqueKeywords = [...new Set(results)];
+    // Unique list
+    let uniqueKeywords = [...new Set(results)].join(", ");
 
-    // 1. Setup Standard List (One per line)
-    document.getElementById('listOutput').innerText = uniqueKeywords.join("\n");
-
-    // 2. Setup Meta Keywords (Comma separated)
-    document.getElementById('metaOutput').innerText = uniqueKeywords.join(", ");
+    // Generate the full HTML Tag string
+    const fullTag = `<meta name="keywords" content="${uniqueKeywords}">`;
+    
+    document.getElementById('metaOutput').innerText = fullTag;
 }
 
-function copyText(elementId) {
-    const text = document.getElementById(elementId).innerText;
+function copyMeta() {
+    const text = document.getElementById('metaOutput').innerText;
     if(!text) return alert("Generate keywords first!");
     
     navigator.clipboard.writeText(text).then(() => {
-        alert("Copied to clipboard!");
+        alert("Meta Tag copied to clipboard!");
     });
 }
 </script>
