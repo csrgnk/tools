@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devotional Video Generator - CSR Tools</title>
+    <style>
+        /* Integrated Header Styles for consistency */
+        body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
+        .header { background-color: #0073e6; padding: 15px 20px; text-align: center; }
+        .header .site-name { color: white; font-size: 24px; font-weight: bold; text-decoration: none; display: block; }
+        
+        .content { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; text-align: center; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+        
+        button { background: #16a34a; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #138b43; }
+        
+        .result { background: #e0f0ff; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #b3d7ff; }
+        .result img { max-width: 100px; margin: 5px; border-radius: 6px; border: 1px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        /* Table Styles */
+        .history-section { margin-top: 40px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+        table, th, td { border: 1px solid #ddd; }
+        th { background: #f2f2f2; padding: 12px; text-align: left; }
+        td { padding: 10px; text-align: left; font-size: 14px; }
+        
+        .back-home { display: block; text-align: center; margin-top: 25px; text-decoration: none; color: #0073e6; font-weight: bold; }
+        .back-home:hover { text-decoration: underline; }
+
+        .clear-btn { background: #dc3545; width: auto; padding: 5px 10px; font-size: 12px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" class="site-name">CSR Tools</a>
+</div>
+
+<div class="content">
+    <h2>🎥 Devotional Video Generator</h2>
+    
+    <form id="videoForm">
+        <label>Video Title:</label>
+        <input type="text" id="title" placeholder="e.g. Namo Narayanaya Bhakthi" required>
+
+        <label>Voice (Male/Female):</label>
+        <select id="voice" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+
+        <label>Images (comma-separated URLs):</label>
+        <textarea id="images" rows="4" placeholder="https://site.com/img1.jpg, https://site.com/img2.jpg" required></textarea>
+
+        <label>Duration (seconds):</label>
+        <input type="number" id="duration" placeholder="e.g. 60" required>
+
+        <button type="submit">Generate Video Preview</button>
+    </form>
+
+    <div id="resultContainer"></div>
+
+    <div class="history-section">
+        <h3>📋 Your Saved Videos</h3>
+        <table id="videoHistory">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Voice</th>
+                    <th>Duration</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="historyBody">
+                </tbody>
+        </table>
+        <button onclick="clearHistory()" class="clear-btn">Clear History</button>
+    </div>
+
+    <a href="index.html" class="back-home">← Back to Home</a>
+</div>
+
+<script>
+    // Load videos from localStorage
+    let videos = JSON.parse(localStorage.getItem('videos')) || [];
+
+    // Function to display videos in table
+    function displayVideos() {
+        const tbody = document.getElementById('historyBody');
+        tbody.innerHTML = "";
+        
+        // Show newest first
+        const sortedVideos = [...videos].reverse();
+
+        sortedVideos.forEach(v => {
+            const row = tbody.insertRow();
+            row.insertCell(0).textContent = v.title;
+            row.insertCell(1).textContent = v.voice;
+            row.insertCell(2).textContent = v.duration + ' s';
+            row.insertCell(3).textContent = v.date;
+        });
+    }
+
+    // Form submit
+    document.getElementById('videoForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        const title = document.getElementById('title').value;
+        const voice = document.getElementById('voice').value;
+        const images = document.getElementById('images').value;
+        const duration = document.getElementById('duration').value;
+
+        const video = { 
+            title, 
+            voice, 
+            images, 
+            duration, 
+            date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        };
+        
+        videos.push(video);
+        localStorage.setItem('videos', JSON.stringify(videos));
+
+        // Display preview
+        const resultContainer = document.getElementById('resultContainer');
+        let imgPreview = '';
+        images.split(',').forEach(img => {
+            if(img.trim()) {
+                imgPreview += `<img src="${img.trim()}" alt="Preview Image" onerror="this.src='https://via.placeholder.com/100?text=Invalid+URL'">`;
+            }
+        });
+
+        resultContainer.innerHTML = `
+            <div class="result">
+                <h4>✅ Video Preview Prepared</h4>
+                <p><strong>Title:</strong> ${title}</p>
+                <p><strong>Voice:</strong> ${voice}</p>
+                <p><strong>Duration:</strong> ${duration} seconds</p>
+                <p><strong>Images:</strong><br>${imgPreview}</p>
+            </div>
+        `;
+
+        displayVideos();
+        this.reset();
+    });
+
+    function clearHistory() {
+        if(confirm("Are you sure you want to delete all saved video records?")) {
+            localStorage.removeItem('videos');
+            videos = [];
+            displayVideos();
+        }
+    }
+
+    // Initial display
+    displayVideos();
+</script>
+
+</body>
+</html>
