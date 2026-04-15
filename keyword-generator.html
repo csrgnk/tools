@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Keyword & Meta Tool - CSR Tools</title>
+    <title>Professional SEO & Branding Tool - CSR Tools</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background: #f4f7f6; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background: #f0f4f8; color: #333; }
         .header { background: #0073e6; padding: 15px; text-align: center; }
         .header .site-name { color: white; font-size: 22px; font-weight: bold; text-decoration: none; }
         
-        .container { max-width: 850px; margin: 30px auto; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; margin-top: 0; }
+        .container { max-width: 850px; margin: 30px auto; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         
-        input { width: 100%; padding: 15px; margin: 15px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #16a34a; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #11863a; }
+        input { width: 100%; padding: 15px; margin: 15px 0; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        button#mainGen { width: 100%; padding: 15px; background: #16a34a; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button#mainGen:hover { background: #11863a; transform: translateY(-1px); }
 
-        .section-label { margin-top: 25px; font-weight: bold; color: #0073e6; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eef2f3; padding-bottom: 5px; }
-        .copy-btn { background: #0073e6; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
-
-        .output-box { 
-            margin-top: 10px; padding: 15px; background: #fafafa; border: 1px solid #ddd; border-radius: 8px; 
-            font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; color: #333; word-break: break-all;
-        }
-        .meta-type { color: #b91c1c; border-color: #0073e6; background: #fdfdfd; }
+        .section-label { margin-top: 30px; font-weight: bold; color: #0073e6; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #edf2f7; padding-bottom: 8px; }
+        .copy-btn { background: #0073e6; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
         
-        .back-link { display: block; text-align: center; margin-top: 30px; color: #666; text-decoration: none; font-weight: bold; }
+        /* Box Styles */
+        .output-box { margin-top: 10px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; line-height: 1.6; word-break: break-all; }
+        
+        /* 1. Public View Style (Beautiful Tags) */
+        #publicView { display: flex; flex-wrap: wrap; gap: 8px; background: white; border: none; padding: 10px 0; }
+        .tag-pill { background: #ebf8ff; color: #2b6cb0; padding: 4px 12px; border-radius: 20px; border: 1px solid #bee3f8; font-weight: 500; font-size: 13px; }
+
+        /* 2. Professional Code Style */
+        .code-style { font-family: 'Courier New', monospace; color: #b91c1c; border-color: #0073e6; }
+        
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #718096; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -35,21 +38,21 @@
 </div>
 
 <div class="container">
-    <h2>🤖 AI Keyword & Meta Generator</h2>
-    <input type="text" id="userInput" placeholder="Enter topic (e.g., Karunashtakalu 1st Ashtakam)">
-    <button onclick="generateAll()">Generate Keywords & Meta Tag</button>
+    <h2 style="text-align: center; margin-top: 0;">🛠️ Professional Branding Generator</h2>
+    <input type="text" id="userInput" placeholder="Enter title (e.g., Karunashtakalu 1st Ashtakam)">
+    <button id="mainGen" onclick="generateAll()">Generate All SEO Formats</button>
 
     <div class="section-label">
-        1. Direct Keywords (Clean List)
-        <button class="copy-btn" onclick="copyText('directOutput')">Copy List</button>
+        🌐 Public View (For Website Display)
+        <button class="copy-btn" onclick="copyPublic()">Copy Tags</button>
     </div>
-    <div id="directOutput" class="output-box">Keywords will appear here...</div>
+    <div id="publicView" class="output-box">Tags will appear here...</div>
 
     <div class="section-label">
-        2. HTML Meta Tag
-        <button class="copy-btn" onclick="copyText('metaOutput')">Copy HTML Tag</button>
+        🛡️ Hidden Meta Tag (SEO Benefit Only)
+        <button class="copy-btn" onclick="copyText('metaOutput')">Copy HTML Code</button>
     </div>
-    <div id="metaOutput" class="output-box meta-type">Meta tag will appear here...</div>
+    <div id="metaOutput" class="output-box code-style">Meta tag will appear here...</div>
 
     <a href="index.html" class="back-link">← Back to Dashboard</a>
 </div>
@@ -59,34 +62,43 @@ function generateAll() {
     let input = document.getElementById('userInput').value.trim();
     if(!input) return alert("Please enter text!");
 
-    // AI Logical Keywords (Clean & Professional)
-    let keywords = [
+    // Pure AI Smart Logic for the list
+    let list = [
         input,
-        `${input} telugu`,
-        `bhakthi ${input}`,
+        `${input} Telugu`,
         `${input} 2026`,
         "Sangameshwar",
-        "Namo Narayanaya Bhakthi Channel",
-        "omnnbc"
+        "Namo Narayanaya Bhakthi Channel"
     ];
 
-    // Remove duplicates
-    let cleanList = [...new Set(keywords)].join(", ");
+    // Clean up
+    let cleanArray = [...new Set(list)];
+    let commaList = cleanArray.join(", ");
 
-    // 1. Display Direct Keywords
-    document.getElementById('directOutput').innerText = cleanList;
+    // 1. Setup Public View (Beautiful Tags)
+    const publicContainer = document.getElementById('publicView');
+    publicContainer.innerHTML = "";
+    cleanArray.forEach(tag => {
+        let span = document.createElement('span');
+        span.className = 'tag-pill';
+        span.innerText = "#" + tag.replace(/\s+/g, ''); // Makes it look like #BhaktiChannel
+        publicContainer.appendChild(span);
+    });
 
-    // 2. Display Meta Tag
-    const finalMeta = `<meta name="keywords" content="${cleanList}">`;
-    document.getElementById('metaOutput').innerText = finalMeta;
+    // 2. Setup Meta Tag (Hidden SEO)
+    document.getElementById('metaOutput').innerText = `<meta name="keywords" content="${commaList}">`;
 }
 
 function copyText(elementId) {
     const text = document.getElementById(elementId).innerText;
     if(text.includes("appear here")) return;
-    navigator.clipboard.writeText(text).then(() => {
-        alert("Copied to clipboard!");
-    });
+    navigator.clipboard.writeText(text).then(() => alert("Copied for Website Header!"));
+}
+
+function copyPublic() {
+    const pills = document.querySelectorAll('.tag-pill');
+    let text = Array.from(pills).map(p => p.innerText).join(" ");
+    navigator.clipboard.writeText(text).then(() => alert("Copied for Public View!"));
 }
 </script>
 
