@@ -1,153 +1,166 @@
-
+```html id="v8n2kq"
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pure Keyword Generator - CSR Tools</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Keyword Generator - CSR Tools</title>
 
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            background: #f4f7f6;
-        }
+<style>
+body { font-family: Arial; margin: 0; background: #f4f7f6; }
 
-        .header {
-            background: #0073e6;
-            padding: 15px;
-            text-align: center;
-        }
+.header { background: #0073e6; padding: 15px; text-align: center; }
+.header a { color: white; font-size: 22px; text-decoration: none; font-weight: bold; }
 
-        .header a {
-            color: white;
-            font-size: 22px;
-            text-decoration: none;
-            font-weight: bold;
-        }
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
 
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 25px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
+h2 { text-align: center; color: #0073e6; }
 
-        h2 {
-            text-align: center;
-            color: #0073e6;
-        }
+input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
 
-        input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
+button {
+    width: 100%;
+    padding: 15px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+}
 
-        button {
-            width: 100%;
-            padding: 15px;
-            background: #16a34a;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            cursor: pointer;
-        }
+button:hover { background: #11863a; }
 
-        button:hover {
-            background: #11863a;
-        }
+.section { margin-top: 25px; }
 
-        .section-label {
-            margin-top: 25px;
-            font-weight: bold;
-            color: #0073e6;
-            display: flex;
-            justify-content: space-between;
-        }
+.label {
+    font-weight: bold;
+    color: #0073e6;
+    margin-bottom: 5px;
+}
 
-        .copy-btn {
-            background: #0073e6;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-        }
+.output {
+    padding: 12px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    word-break: break-all;
+}
 
-        .output-box {
-            margin-top: 10px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            word-break: break-all;
-        }
+.copy-btn {
+    background: #0073e6;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    float: right;
+}
 
-        .meta {
-            font-family: monospace;
-            color: #b91c1c;
-        }
-    </style>
+.meta { font-family: monospace; color: #b91c1c; }
+
+.back {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    text-decoration: none;
+    color: #555;
+    font-weight: bold;
+}
+</style>
 </head>
 
 <body>
 
 <div class="header">
-    <a href="#">CSR Tools</a>
+    <a href="index.html">CSR Tools</a>
 </div>
 
 <div class="container">
-    <h2>🎯 Pure Keyword Generator</h2>
+<h2>🚀 Advanced Keyword Generator</h2>
 
-    <input type="text" id="userInput" placeholder="Enter your keyword...">
+<input type="text" id="input" placeholder="Enter your keyword...">
 
-    <button onclick="generate()">Generate</button>
+<button onclick="generate()">Generate Keywords</button>
 
-    <div class="section-label">
-        Hashtags
-        <button class="copy-btn" onclick="copy('hashtags')">Copy</button>
-    </div>
-    <div id="hashtags" class="output-box"></div>
+<div class="section">
+<div class="label">Main Keyword</div>
+<div id="main" class="output"></div>
+</div>
 
-    <div class="section-label">
-        Meta Tag
-        <button class="copy-btn" onclick="copy('meta')">Copy</button>
-    </div>
-    <div id="meta" class="output-box meta"></div>
+<div class="section">
+<div class="label">Keyword Variations 
+<button class="copy-btn" onclick="copy('list')">Copy</button>
+</div>
+<div id="list" class="output"></div>
+</div>
+
+<div class="section">
+<div class="label">Hashtags 
+<button class="copy-btn" onclick="copy('tags')">Copy</button>
+</div>
+<div id="tags" class="output"></div>
+</div>
+
+<div class="section">
+<div class="label">Meta Tag 
+<button class="copy-btn" onclick="copy('meta')">Copy</button>
+</div>
+<div id="meta" class="output meta"></div>
+</div>
+
+<a href="index.html" class="back">← Back to Home</a>
+
 </div>
 
 <script>
 function generate() {
-    let input = document.getElementById("userInput").value.trim();
+    let input = document.getElementById("input").value.trim();
     if (!input) return alert("Enter keyword");
 
     let words = input.split(" ");
     let list = [];
 
-    // PURE formats only
-    list.push(input); // original
-    list.push(input.toLowerCase()); // small
-    list.push(input.toUpperCase()); // capital
+    // main
+    document.getElementById("main").innerText = input;
+
+    // variations (pure)
+    list.push(input);
+    list.push(input.toLowerCase());
+    list.push(input.toUpperCase());
+    list.push(words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "));
 
     if (words.length > 1) {
-        list.push(words.join(""));   // no space
-        list.push(words.join("-"));  // dashed
+        list.push(words.join(""));
+        list.push(words.join("-"));
+        list.push(words.join("_"));
     }
 
     // remove duplicates
     list = [...new Set(list)];
 
+    // show list
+    document.getElementById("list").innerText = list.join(", ");
+
     // hashtags
     let tags = list.map(k => "#" + k.replace(/[^a-zA-Z0-9]/g, "")).join(" ");
-    document.getElementById("hashtags").innerText = tags;
+    document.getElementById("tags").innerText = tags;
 
     // meta
     document.getElementById("meta").innerText =
@@ -156,8 +169,6 @@ function generate() {
 
 function copy(id) {
     let text = document.getElementById(id).innerText;
-    if (!text) return;
-
     navigator.clipboard.writeText(text);
     alert("Copied!");
 }
