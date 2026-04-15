@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Lang Post Creator</title>
+    <style>
+        /* Header Style */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+        .header { background-color: #0073e6; padding: 15px 20px; text-align: center; }
+        .header .site-name { color: white; font-size: 24px; font-weight: bold; text-decoration: none; }
+        
+        /* Layout */
+        .container { padding: 30px; max-width: 800px; margin: 0 auto; background: white; min-height: 100vh; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+        h1 { color: #0073e6; border-bottom: 2px solid #0073e6; padding-bottom: 10px; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        
+        /* Form Elements */
+        input[type="text"], textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .lang-select { margin: 15px 0; padding: 10px; background: #eef6ff; border-radius: 6px; }
+        
+        /* Buttons */
+        button { padding: 12px 20px; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; margin: 10px 5px 0 0; transition: 0.3s; }
+        button[type="submit"] { background: #16a34a; color: white; width: 100%; margin-top: 20px; font-weight: bold; }
+        .btn-switch { background: #0073e6; color: white; font-size: 14px; }
+        button:hover { opacity: 0.8; }
+
+        /* Output Box */
+        #result-display { display: none; margin-top: 30px; padding: 20px; border: 2px dashed #16a34a; background: #f0fff4; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" class="site-name">CSR Tools</a>
+</div>
+
+<div class="container">
+    <h1>Create Multi-Lang Post</h1>
+
+    <form id="postForm" onsubmit="handleFormSubmit(event)">
+        <label for="postTitle">Post Title:</label>
+        <input type="text" id="postTitle" placeholder="Enter post title" required />
+
+        <div class="lang-select">
+            <strong>Select Languages:</strong><br>
+            <input type="checkbox" id="telugu" value="telugu" onclick="toggleLanguage()"> Telugu
+            <input type="checkbox" id="hindi" value="hindi" onclick="toggleLanguage()"> Hindi
+        </div>
+
+        <div id="content-boxes" style="display:none;">
+            <div id="telugu-box" style="display:none;">
+                <h3>Telugu Content</h3>
+                <textarea id="teluguContent" rows="5" placeholder="Enter Telugu content"></textarea>
+            </div>
+
+            <div id="hindi-box" style="display:none;">
+                <h3>Hindi Content</h3>
+                <textarea id="hindiContent" rows="5" placeholder="Enter Hindi content"></textarea>
+            </div>
+
+            <button type="button" class="btn-switch" onclick="switchContent('telugu')">Show Telugu</button>
+            <button type="button" class="btn-switch" onclick="switchContent('hindi')">Show Hindi</button>
+        </div>
+
+        <button type="submit">Preview / Generate Data</button>
+    </form>
+
+    <div id="result-display">
+        <h2 style="color: #16a34a;">✅ Post Prepared!</h2>
+        <div id="output-data"></div>
+        <button onclick="window.location.reload()" style="background:#555; color:white;">Create New Post</button>
+    </div>
+
+    <p style="text-align:center; margin-top:30px;">
+        <a href="index.html" style="text-decoration:none; color:#0073e6; font-weight:bold;">← Back to Tools Home</a>
+    </p>
+</div>
+
+<script>
+    function toggleLanguage() {
+        const isTeluguSelected = document.getElementById('telugu').checked;
+        const isHindiSelected = document.getElementById('hindi').checked;
+        
+        document.getElementById('content-boxes').style.display = (isTeluguSelected || isHindiSelected) ? 'block' : 'none';
+        document.getElementById('telugu-box').style.display = isTeluguSelected ? 'block' : 'none';
+        document.getElementById('hindi-box').style.display = isHindiSelected ? 'block' : 'none';
+    }
+
+    function switchContent(language) {
+        // Only switch if the language is actually checked
+        if(!document.getElementById(language).checked) {
+            alert("Please select " + language + " checkbox first!");
+            return;
+        }
+        document.getElementById('telugu-box').style.display = 'none';
+        document.getElementById('hindi-box').style.display = 'none';
+        document.getElementById(language + '-box').style.display = 'block';
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault(); // Stop page from refreshing
+        
+        const title = document.getElementById('postTitle').value;
+        const telugu = document.getElementById('teluguContent').value;
+        const hindi = document.getElementById('hindiContent').value;
+        
+        document.getElementById('postForm').style.display = 'none';
+        document.getElementById('result-display').style.display = 'block';
+        
+        document.getElementById('output-data').innerHTML = `
+            <p><strong>Title:</strong> ${title}</p>
+            <p><strong>Telugu:</strong><br>${telugu.replace(/\n/g, '<br>')}</p>
+            <p><strong>Hindi:</strong><br>${hindi.replace(/\n/g, '<br>')}</p>
+        `;
+    }
+</script>
+
+</body>
+</html>
