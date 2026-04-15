@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Line TTS Tool - CSR Tools</title>
+    <style>
+        /* Integrated Header Styles */
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 0; }
+        .header { background-color: #0073e6; padding: 15px 20px; text-align: center; }
+        .header .site-name { color: white; font-size: 24px; font-weight: bold; text-decoration: none; display: block; }
+        
+        .content { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        button { background: #0073e6; color: white; padding: 8px 14px; border: none; border-radius: 6px; cursor: pointer; margin: 5px 2px; transition: 0.2s; }
+        button:hover { background: #005bb5; }
+        
+        textarea, input, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 10px; box-sizing: border-box; }
+        
+        .speaker-block { margin-bottom: 15px; padding: 15px; border-radius: 10px; background: #e8f0fe; border: 1px solid #d0e0fb; }
+        .line-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .line-label { font-weight: bold; color: #0073e6; }
+        
+        .back-home { display: block; text-align: center; margin-top: 20px; padding: 10px; background: #f97316; color: white; border-radius: 6px; text-decoration: none; font-weight: bold; width: 200px; margin-left: auto; margin-right: auto; }
+        .back-home:hover { background: #c2410c; }
+        
+        .status-msg { padding: 10px; background: #fff3cd; color: #856404; border-radius: 6px; margin-bottom: 15px; font-size: 14px; border: 1px solid #ffeeba; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" class="site-name">CSR Tools</a>
+</div>
+
+<div class="content">
+    <div class="status-msg">
+        <strong>Note:</strong> Since this is a static site (GitHub Pages), MP3 generation/mixing is limited to browser playback.
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
+        <button type="button" id="addSpeaker">➕ Add Line</button>
+        <button type="button" id="removeLast">⬅ Remove Last Line</button>
+        <button type="button" id="playAll" style="background: #16a34a;">▶ Play All Lines</button>
+    </div>
+
+    <div id="speakersContainer"></div>
+
+    <a href="index.html" class="back-home">🏠 Back to Home</a>
+</div>
+
+<script>
+let speakerCount = 0;
+const container = document.getElementById('speakersContainer');
+const synth = window.speechSynthesis;
+
+function addSpeakerBlock() {
+    speakerCount++;
+    const div = document.createElement('div');
+    div.className = 'speaker-block';
+    div.id = 'speaker' + speakerCount;
+    div.innerHTML = `
+        <div class="line-header">
+            <span class="line-label">Line ${speakerCount}</span>
+            <button type="button" onclick="removeSpeaker(${speakerCount})" style="background:red; padding:4px 8px; font-size:12px;">❌ Remove</button>
+        </div>
+        <textarea rows="3" placeholder="Enter text to speak..."></textarea>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div>
+                <label style="font-size:12px;">Speed (0.5 - 2):</label>
+                <input type="number" class="rate" min="0.5" max="2" step="0.1" value="1">
+            </div>
+            <div>
+                <label style="font-size:12px;">Pitch (0 - 2):</label>
+                <input type="number" class="pitch" min="0" max="2" step="0.1" value="1">
+            </div>
+        </div>
+        <button type="button" onclick="playSingleLine(${speakerCount})" style="width:100%; margin-top:5px; background:#555;">🔊 Preview This Line</button>
+    `;
+    container.appendChild(div);
+}
+
+function removeSpeaker(id) {
+    const el = document.getElementById('speaker' + id);
+    if (el) el.remove();
+}
+
+function playSingleLine(id) {
+    const block = document.getElementById('speaker' + id);
+    const text = block.querySelector('textarea').value;
+    const rate = block.querySelector('.rate').value;
+    const pitch = block.querySelector('.pitch').value;
+
+    if (!text.trim()) return alert("Please enter text first!");
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = rate;
+    utterance.pitch = pitch;
+    synth.cancel(); // Stop any current speech
+    synth.speak(utterance);
+}
+
+document.getElementById('removeLast').addEventListener('click', () => {
+    const blocks = container.querySelectorAll('.speaker-block');
+    if (blocks.length) blocks[blocks.length - 1].remove();
+});
+
+document.getElementById('addSpeaker').addEventListener('click', () => addSpeakerBlock());
+
+document.getElementById('playAll').addEventListener('click', () => {
+    const blocks = container.querySelectorAll('.speaker-block');
+    if (blocks.length === 0) return alert("Add a line first!");
+    
+    synth.cancel();
+    blocks.forEach((block) => {
+        const text = block.querySelector('textarea').value;
+        if (text.trim()) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = block.querySelector('.rate').value;
+            utterance.pitch = block.querySelector('.pitch').value;
+            synth.speak(utterance);
+        }
+    });
+});
+
+// Initial block
+addSpeakerBlock();
+</script>
+
+</body>
+</html>
