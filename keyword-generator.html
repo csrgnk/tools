@@ -3,31 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hashtag & Meta Generator - CSR Tools</title>
+    <title>SEO Pure Keyword Generator</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background: #f4f7f6; color: #333; }
         .header { background: #0073e6; padding: 15px; text-align: center; }
         .header .site-name { color: white; font-size: 22px; font-weight: bold; text-decoration: none; }
-        
         .container { max-width: 850px; margin: 30px auto; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        
-        label { font-weight: bold; color: #4a5568; }
         input { width: 100%; padding: 15px; margin: 10px 0 20px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        
         button#genBtn { width: 100%; padding: 15px; background: #16a34a; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        button#genBtn:hover { background: #11863a; }
-
         .section-label { margin-top: 30px; font-weight: bold; color: #0073e6; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 8px; }
         .copy-btn { background: #0073e6; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; }
-
-        .output-box { margin-top: 10px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; line-height: 1.6; word-break: break-all; }
-        
-        /* Hashtag Style */
-        .hashtag-display { color: #1a202c; font-weight: 500; background: #fff; border: 1px solid #0073e6; }
-        /* Meta Style */
-        .meta-display { font-family: 'Courier New', monospace; color: #b91c1c; background: #fdfdfd; }
-        
-        .back-link { display: block; text-align: center; margin-top: 30px; color: #666; text-decoration: none; font-weight: bold; }
+        .output-box { margin-top: 10px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; line-height: 1.6; word-break: break-all; min-height: 50px; }
+        .meta-display { font-family: 'Courier New', monospace; color: #b91c1c; }
+        a#back { display: block; text-align: center; margin-top: 25px; text-decoration: none; color: #666; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -37,64 +25,61 @@
 </div>
 
 <div class="container">
-    <h2 style="text-align: center; margin-top: 0;">🤖 AI Hashtag & Meta Generator</h2>
+    <h2 style="text-align: center; margin-top: 0;">🎯 Pure SEO Keyword Generator</h2>
     
-    <label>Enter Video Title:</label>
-    <input type="text" id="userInput" placeholder="e.g., Vishnu Sahasra Nama stotram">
+    <label>Enter Topic (e.g., Vishnu Sahasra Namam):</label>
+    <input type="text" id="userInput" placeholder="Paste your main title here...">
     
-    <button id="genBtn" onclick="generateSEO()">Generate Tags & Meta</button>
+    <button id="genBtn" onclick="generateSEO()">Generate Topic-Based Keywords</button>
 
     <div class="section-label">
-        1. Public Hashtags (For Video/Post)
-        <button class="copy-btn" onclick="copyValue('hashtagOutput')">Copy Hashtags</button>
+        1. Search-Focused Hashtags
+        <button class="copy-btn" onclick="copyValue('hashtagOutput')">Copy</button>
     </div>
-    <div id="hashtagOutput" class="output-box hashtag-display">Hashtags will appear here...</div>
+    <div id="hashtagOutput" class="output-box"></div>
 
     <div class="section-label">
-        2. Hidden Meta Code (For Website Head)
-        <button class="copy-btn" onclick="copyValue('metaOutput')">Copy Meta Tag</button>
+        2. SEO Meta Code
+        <button class="copy-btn" onclick="copyValue('metaOutput')">Copy</button>
     </div>
-    <div id="metaOutput" class="output-box meta-display">Meta tag will appear here...</div>
+    <div id="metaOutput" class="output-box meta-display"></div>
 
-    <a href="index.html" class="back-link">← Back to Dashboard</a>
+    <a id="back" href="index.html">← Back to Dashboard</a>
 </div>
 
 <script>
 function generateSEO() {
     let input = document.getElementById('userInput').value.trim();
-    if(!input) return alert("Please enter a title!");
+    if(!input) return alert("Please enter a topic!");
 
-    // Clean data logic
-    let rawTags = [
+    // Pure topic-based keywords only (Removed Name/Channel)
+    let variations = [
         input,
         `${input} Telugu`,
+        `${input} Stotram`,
+        `${input} Lyrics`,
+        `${input} Meaning`,
         `${input} 2026`,
-        "Sangameshwar",
-        "Namo Narayanaya Bhakthi Channel"
+        `Bhakti ${input}`,
+        `Full ${input}`
     ];
 
-    // 1. Generate Public Hashtags (#NoSpaces)
-    let hashtags = rawTags.map(tag => {
-        // Remove spaces and special characters, add #
+    // 1. Generate Hashtags
+    let hashtags = variations.map(tag => {
         let clean = tag.replace(/[^a-zA-Z0-9]/g, "");
         return "#" + clean;
     }).join(" ");
-
     document.getElementById('hashtagOutput').innerText = hashtags;
 
-    // 2. Generate Meta Keywords (Comma Separated)
-    let metaKeywords = rawTags.join(", ");
-    let metaTag = `<meta name="keywords" content="${metaKeywords}">`;
-    
-    document.getElementById('metaOutput').innerText = metaTag;
+    // 2. Generate Meta Tag
+    let metaKeywords = variations.join(", ");
+    document.getElementById('metaOutput').innerText = `<meta name="keywords" content="${metaKeywords}">`;
 }
 
 function copyValue(id) {
     const text = document.getElementById(id).innerText;
-    if(text.includes("appear here")) return;
-    navigator.clipboard.writeText(text).then(() => {
-        alert("Copied successfully!");
-    });
+    if(!text) return;
+    navigator.clipboard.writeText(text).then(() => alert("Copied!"));
 }
 </script>
 
