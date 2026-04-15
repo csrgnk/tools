@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keyword Generator Tool</title>
+    <title>Keyword & Meta Generator - CSR Tools</title>
     <style>
         /* Shared Header Styles */
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
         .header { background-color: #0073e6; padding: 15px 20px; text-align: center; }
         .header .site-name { color: white; font-size: 24px; font-weight: bold; text-decoration: none; }
         
-        /* Tool Specific Styles */
         .container { padding: 20px; max-width: 800px; margin: 0 auto; }
         h2 { text-align: center; margin-bottom: 15px; color: #333; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
         
         .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        button { flex: 1; padding: 12px; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; color: white; transition: opacity 0.3s; }
+        button { flex: 1; padding: 12px; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: bold; transition: 0.3s; }
         .btn-gen { background: #16a34a; }
-        .btn-copy { background: #0073e6; }
         button:hover { opacity: 0.9; }
         
-        #output { 
+        /* Result Boxes */
+        .result-section { margin-top: 20px; }
+        h3 { font-size: 16px; color: #0073e6; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .copy-link { font-size: 12px; background: #0073e6; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; text-decoration: none; }
+
+        .output-box { 
             border: 1px solid #ccc; 
             border-radius: 6px; 
-            padding: 15px; 
-            min-height: 150px; 
+            padding: 12px; 
+            min-height: 100px; 
+            max-height: 200px;
+            overflow-y: auto;
             background: white; 
             white-space: pre-wrap; 
             font-family: monospace;
-            line-height: 1.6;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
         
         a#backHome { display: block; text-align: center; margin-top: 25px; text-decoration: none; color: #0073e6; font-weight: bold; }
-        a#backHome:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -43,17 +50,27 @@
 </div>
 
 <div class="container">
-    <h2>🔑 Keyword Generator</h2>
+    <h2>🔑 Keyword & Meta Generator</h2>
 
-    <input type="text" id="baseKeyword" placeholder="Enter base keyword or phrase (e.g. Yoga Mats)">
+    <input type="text" id="baseKeyword" placeholder="Enter base keyword (e.g. Namo Narayanaya)">
     
     <div class="btn-group">
-        <button class="btn-gen" onclick="generateKeywords()">Generate</button>
-        <button class="btn-copy" onclick="copyKeywords()">Copy Keywords</button>
+        <button class="btn-gen" onclick="generateKeywords()">Generate All Formats</button>
     </div>
 
-    <h3>Generated Keywords:</h3>
-    <div id="output"></div>
+    <div class="result-section">
+        <h3>
+            Standard List (One per line)
+            <span class="copy-link" onclick="copyText('listOutput')">Copy List</span>
+        </h3>
+        <div id="listOutput" class="output-box"></div>
+
+        <h3>
+            Meta Keywords (Comma separated)
+            <span class="copy-link" onclick="copyText('metaOutput')">Copy Meta Tags</span>
+        </h3>
+        <div id="metaOutput" class="output-box"></div>
+    </div>
 
     <a id="backHome" href="index.html">← Back to Home</a>
 </div>
@@ -63,31 +80,32 @@ function generateKeywords() {
     let base = document.getElementById('baseKeyword').value.trim();
     if(!base) return alert("Please enter a keyword!");
     
-    let output = [];
-    // variations updated to 2026 for accuracy
-    let variations = ["buy", "cheap", "best", "review", "online", "2026", "tips", "how to", "near me"];
+    let variations = ["buy", "best", "review", "online", "2026", "tips", "latest", "free", "how to"];
+    let results = [];
     
+    // Create combinations
     variations.forEach(v => {
-        output.push(`${v} ${base}`);
-        output.push(`${base} ${v}`);
+        results.push(`${v} ${base}`);
+        results.push(`${base} ${v}`);
     });
+    results.push(base);
     
-    // Add the base keyword alone
-    output.push(base);
-    
-    // Remove duplicates and join
-    let uniqueKeywords = [...new Set(output)];
-    document.getElementById('output').innerText = uniqueKeywords.join("\n");
+    // Remove duplicates
+    let uniqueKeywords = [...new Set(results)];
+
+    // 1. Setup Standard List (One per line)
+    document.getElementById('listOutput').innerText = uniqueKeywords.join("\n");
+
+    // 2. Setup Meta Keywords (Comma separated)
+    document.getElementById('metaOutput').innerText = uniqueKeywords.join(", ");
 }
 
-function copyKeywords(){
-    const output = document.getElementById('output');
-    if(!output.innerText) return alert("No keywords to copy!");
+function copyText(elementId) {
+    const text = document.getElementById(elementId).innerText;
+    if(!text) return alert("Generate keywords first!");
     
-    navigator.clipboard.writeText(output.innerText).then(() => {
-        alert("Keywords copied to clipboard!");
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Copied to clipboard!");
     });
 }
 </script>
