@@ -3,134 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CSR Tools</title>
+    <title>CSR Tools - Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f9f9f9;
+            background: #f0f2f5;
             margin: 0;
             padding: 0;
         }
 
-        /* Header */
+        /* Header Section */
         .header {
             background-color: #0073e6;
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .header .site-name {
             color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            margin: 0;
             font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-decoration: none;
+            letter-spacing: 1px;
         }
 
-        .header .codex-link {
-            display: inline-block;
-            padding: 10px 18px;
-            background: #16a34a;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 8px;
+        .header p {
+            margin: 10px 0 0;
+            opacity: 0.9;
             font-size: 16px;
-            font-weight: bold;
-            transition: background 0.3s ease, transform 0.2s ease;
         }
 
-        .header .codex-link:hover {
-            background: #138b43;
-            transform: translateY(-2px);
-        }
-
-        /* Main menu grid */
+        /* Main Menu Grid */
         .main-menu {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            max-width: 1000px;
-            margin: 30px auto;
+            max-width: 1100px;
+            margin: 40px auto;
             padding: 0 20px;
         }
 
         .tool-box {
             background: #fff;
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 15px;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
             cursor: pointer;
             text-decoration: none;
-            color: #111;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
+            border: 1px solid #eee;
         }
 
         .tool-box:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border-color: #0073e6;
         }
 
         .tool-icon {
-            font-size: 36px;
-            margin-bottom: 10px;
+            font-size: 45px;
+            margin-bottom: 15px;
+            background: #eef6ff;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
             color: #0073e6;
         }
 
         .tool-title {
-            font-size: 18px;
+            font-size: 19px;
             font-weight: bold;
             color: #0073e6;
+            margin-bottom: 8px;
+        }
+
+        .tool-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
         }
 
         footer {
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
+            padding: 30px;
+            margin-top: 50px;
             font-size: 14px;
-            color: #555;
-            border-top: 1px solid #eee;
+            color: #888;
+            background: #fff;
+            border-top: 1px solid #ddd;
         }
 
-        @media (max-width: 480px) {
-            .header { font-size: 20px; padding: 15px; }
-            .tool-icon { font-size: 28px; }
-            .tool-title { font-size: 16px; }
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .main-menu {
+                grid-template-columns: 1fr;
+            }
+            .header h1 { font-size: 24px; }
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <span class="site-name">CSR Tools</span>
-        <a href="cheatsheet.html" class="codex-link">Codex Cheatsheet</a>
+        <h1>CSR Tools Dashboard</h1>
+        <p>Advanced Content Creation & SEO Management</p>
     </div>
 
     <div class="main-menu">
+
         <a href="post-editor.html" class="tool-box">
             <div class="tool-icon">✏️</div>
-            <div class="tool-title">Post Editor</div>
+            <div class="tool-title">Full Post Editor</div>
+            <div class="tool-desc">Rich text editor with HTML generation and YouTube embedding.</div>
         </a>
 
-        <a href="add-post.html" class="tool-box">
-            <div class="tool-icon">📝</div>
-            <div class="tool-title">Add Post</div>
+        <a href="multi-lang-post.html" class="tool-box">
+            <div class="tool-icon">🌐</div>
+            <div class="tool-title">Multi-Lang Post</div>
+            <div class="tool-desc">Create posts in Telugu and Hindi with specialized content areas.</div>
         </a>
 
-        <a href="auto-media-html.html" class="tool-box">
+        <a href="keyword-generator.html" class="tool-box">
+            <div class="tool-icon">🔑</div>
+            <div class="tool-title">Keyword Generator</div>
+            <div class="tool-desc">Generate SEO variations and 2026 tags for your base keywords.</div>
+        </a>
+
+        <a href="video-gen.html" class="tool-box">
             <div class="tool-icon">🎥</div>
-            <div class="tool-title">Auto Media HTML Generator</div>
+            <div class="tool-title">Video Generator</div>
+            <div class="tool-desc">Plan devotional videos and maintain a history of your creations.</div>
         </a>
+
+        <a href="visual-preview.html" class="tool-box">
+            <div class="tool-icon">👁️</div>
+            <div class="tool-title">Visual Preview</div>
+            <div class="tool-desc">Live rendering for HTML, TXT, and code snippet testing.</div>
+        </a>
+
+        <a href="tts-tool.html" class="tool-box">
+            <div class="tool-icon">🔊</div>
+            <div class="tool-title">Text-to-Speech</div>
+            <div class="tool-desc">Multi-line browser-based voice preview with speed/pitch control.</div>
+        </a>
+
     </div>
 
     <footer>
-        &copy; 2026 CSR Tools. All rights reserved.
+        &copy; 2026 CSR Tools &bull; Powered by GitHub Pages<br>
+        <small>Static Version (No Backend Required)</small>
     </footer>
 
 </body>
