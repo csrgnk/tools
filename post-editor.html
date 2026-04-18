@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Editor - Full Features</title>
+    <title>Post Editor - Clean Features</title>
     <style>
         /* Integrated Header Styles */
         body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; }
@@ -14,7 +14,6 @@
         .main-container { padding: 10px; max-width: 1000px; margin: 0 auto; }
         h2 { text-align:center; margin-bottom:15px; }
         
-        /* REMOVED STICKY POSITIONING */
         #toolbar { 
             display:flex; 
             flex-wrap:wrap; 
@@ -40,22 +39,37 @@
             background:white;
             border-radius:6px;
             font-size: 18px; 
-            line-height: 1.6;
+            line-height: 1.8;
             position:relative;
         }
         
-        /* Ensures pasted text respects the large font size */
-        #editor p, #editor div, #editor span {
+        /* Ensures text and pasted content respects the 18px rule */
+        #editor p, #editor div, #editor span, #editor li {
             font-size: 18px;
         }
 
         #editor:empty:before {
-            content: "Type your post here...";
+            content: "Type or paste your content here...";
             color: #999;
             pointer-events: none;
         }
         
-        textarea { width:100%; min-height:200px; margin-top:10px; border-radius:6px; padding:8px; border:1px solid #ccc; font-family:monospace; box-sizing: border-box; font-size: 14px; }
+        /* Code Output styling */
+        textarea { 
+            width:100%; 
+            min-height:300px; 
+            margin-top:10px; 
+            border-radius:6px; 
+            padding:10px; 
+            border:1px solid #ccc; 
+            font-family: 'Courier New', monospace; 
+            box-sizing: border-box; 
+            font-size: 14px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            line-height: 1.5;
+        }
+        
         button#generate, button#copyHTML { margin-top:10px; padding:12px 24px; font-size:16px; background:green; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; }
         button#copyHTML { background: #0073e6; }
         
@@ -73,7 +87,7 @@
 </div>
 
 <div class="main-container">
-    <h2>📄 Post Editor - Full Features</h2>
+    <h2>📄 Post Editor</h2>
 
     <div id="toolbar">
         <button onclick="format('bold')"><b>B</b></button>
@@ -119,7 +133,7 @@
     <button id="copyHTML" onclick="copyHTML()">Copy HTML</button>
 
     <h3>Generated HTML:</h3>
-    <textarea id="output" readonly placeholder="Your HTML code will appear here..."></textarea>
+    <textarea id="output" readonly placeholder="HTML code will appear here..."></textarea>
 
     <a id="backHome" href="index.html">← Back to Home</a>
 </div>
@@ -128,14 +142,12 @@
     const editor = document.getElementById('editor');
     const output = document.getElementById('output');
 
-    // Fix for small text when pasting
+    // Clean pasted text to keep it at 18px
     editor.addEventListener('paste', (e) => {
         setTimeout(() => {
             const allElements = editor.querySelectorAll('*');
             allElements.forEach(el => {
-                if(el.style.fontSize) {
-                    el.style.fontSize = "18px";
-                }
+                el.style.fontSize = "18px";
             });
         }, 10);
     });
@@ -145,7 +157,7 @@
     }
 
     function createLink(){ 
-        let url = prompt("Enter URL (include https://)", "https://"); 
+        let url = prompt("Enter URL:", "https://"); 
         if(url) format("createLink", url); 
     }
 
@@ -184,7 +196,7 @@
     }
 
     function insertYouTubeEmbed() {
-        const url = prompt("Enter YouTube Video URL or ID:");
+        const url = prompt("Enter YouTube URL:");
         if (url) {
             let videoId = "";
             if (url.includes("v=")) videoId = url.split("v=")[1].split("&")[0];
@@ -197,19 +209,35 @@
     }
 
     function generateHTML() {
-        const rawContent = editor.innerHTML;
-        // Output also includes the font-size fix for the live site
-        const styledOutput = `<div style="font-size: 18px; line-height: 1.6; font-family: Arial, sans-serif;">\n${rawContent}\n</div>`;
-        output.value = styledOutput;
+        let rawContent = editor.innerHTML;
+
+        // Create line breaks for GitHub readability
+        let cleanHTML = rawContent
+            .replace(/<\/p>/g, "</p>\n")
+            .replace(/<\/h1>/g, "</h1>\n")
+            .replace(/<\/h2>/g, "</h2>\n")
+            .replace(/<\/h3>/g, "</h3>\n")
+            .replace(/<br>/g, "<br>\n")
+            .replace(/<li>/g, "\n  <li>")
+            .replace(/<\/ul>/g, "\n</ul>\n")
+            .replace(/<\/div>/g, "</div>\n");
+
+        // Wrap in a container for the website
+        let finalOutput = `<div style="font-size: 18px; line-height: 1.8; font-family: Arial, sans-serif;">\n`;
+        finalOutput += cleanHTML + `\n`;
+        finalOutput += `</div>`;
+        
+        output.value = finalOutput;
     }
 
     function copyHTML() {
         if(!output.value) return alert("Generate HTML first!");
         output.select();
         document.execCommand("copy");
-        alert("HTML copied to clipboard!");
+        alert("HTML copied!");
     }
 </script>
 
 </body>
-</html>
+    </html>
+    
