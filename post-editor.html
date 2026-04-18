@@ -13,7 +13,19 @@
         /* Editor Styles */
         .main-container { padding: 10px; max-width: 1000px; margin: 0 auto; }
         h2 { text-align:center; margin-bottom:15px; }
-        #toolbar { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; background:#eee; padding:10px; border-radius:6px; position: sticky; top: 0; z-index: 100; }
+        
+        /* REMOVED STICKY POSITIONING */
+        #toolbar { 
+            display:flex; 
+            flex-wrap:wrap; 
+            gap:5px; 
+            margin-bottom:10px; 
+            background:#eee; 
+            padding:10px; 
+            border-radius:6px; 
+            border: 1px solid #ccc;
+        }
+        
         #toolbar button, #toolbar select, #toolbar input[type=color] {
             padding:6px 10px; font-size:14px; border:1px solid #ccc; border-radius:4px; background:white; cursor:pointer;
         }
@@ -27,13 +39,12 @@
             outline:none;
             background:white;
             border-radius:6px;
-            /* INCREASED FONT SIZE SETUP */
             font-size: 18px; 
             line-height: 1.6;
             position:relative;
         }
         
-        /* Ensures pasted paragraphs/divs follow the 18px rule */
+        /* Ensures pasted text respects the large font size */
         #editor p, #editor div, #editor span {
             font-size: 18px;
         }
@@ -47,8 +58,6 @@
         textarea { width:100%; min-height:200px; margin-top:10px; border-radius:6px; padding:8px; border:1px solid #ccc; font-family:monospace; box-sizing: border-box; font-size: 14px; }
         button#generate, button#copyHTML { margin-top:10px; padding:12px 24px; font-size:16px; background:green; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; }
         button#copyHTML { background: #0073e6; }
-        button#generate:hover { background:#006400; }
-        button#copyHTML:hover { background:#005bb5; }
         
         a#backHome { display:block; text-align:center; margin-top:15px; text-decoration:none; color:#0073e6; font-weight:bold; padding-bottom: 20px; }
         
@@ -119,13 +128,11 @@
     const editor = document.getElementById('editor');
     const output = document.getElementById('output');
 
-    // 1. FORCED FONT SIZE ON PASTE
-    // This removes "small" styling from text copied from other sites
+    // Fix for small text when pasting
     editor.addEventListener('paste', (e) => {
         setTimeout(() => {
             const allElements = editor.querySelectorAll('*');
             allElements.forEach(el => {
-                // If the element has an inline font-size, we override it to 18px
                 if(el.style.fontSize) {
                     el.style.fontSize = "18px";
                 }
@@ -189,10 +196,9 @@
         }
     }
 
-    // 2. UPDATED GENERATOR
-    // This wraps the output in a div that keeps the font large on your website
     function generateHTML() {
         const rawContent = editor.innerHTML;
+        // Output also includes the font-size fix for the live site
         const styledOutput = `<div style="font-size: 18px; line-height: 1.6; font-family: Arial, sans-serif;">\n${rawContent}\n</div>`;
         output.value = styledOutput;
     }
