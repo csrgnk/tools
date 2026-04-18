@@ -11,9 +11,9 @@
         .header .site-name { color: white; font-size: 24px; font-weight: bold; text-decoration: none; }
         
         /* Editor Styles */
-        .main-container { padding: 10px; }
+        .main-container { padding: 10px; max-width: 1000px; margin: 0 auto; }
         h2 { text-align:center; margin-bottom:15px; }
-        #toolbar { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; background:#eee; padding:5px; border-radius:6px; }
+        #toolbar { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; background:#eee; padding:10px; border-radius:6px; position: sticky; top: 0; z-index: 100; }
         #toolbar button, #toolbar select, #toolbar input[type=color] {
             padding:6px 10px; font-size:14px; border:1px solid #ccc; border-radius:4px; background:white; cursor:pointer;
         }
@@ -21,31 +21,38 @@
         #toolbar input[type=color] { padding:2px; width:32px; height:32px; }
         
         #editor {
-    border:1px solid #ccc;
-    padding:10px;
-    min-height:300px;
-    outline:none;
-    background:white;
-    border-radius:6px;
-    /* Increase these two values */
-    font-size: 18px; 
-    line-height: 1.6;
-    position:relative;
+            border:1px solid #ccc;
+            padding:15px;
+            min-height:400px;
+            outline:none;
+            background:white;
+            border-radius:6px;
+            /* INCREASED FONT SIZE SETUP */
+            font-size: 18px; 
+            line-height: 1.6;
+            position:relative;
         }
+        
+        /* Ensures pasted paragraphs/divs follow the 18px rule */
+        #editor p, #editor div, #editor span {
+            font-size: 18px;
+        }
+
         #editor:empty:before {
             content: "Type your post here...";
             color: #999;
             pointer-events: none;
         }
         
-        textarea { width:100%; min-height:150px; margin-top:10px; border-radius:6px; padding:8px; border:1px solid #ccc; font-family:monospace; box-sizing: border-box; }
-        button#generate, button#copyHTML { margin-top:10px; padding:10px 20px; font-size:16px; background:green; color:white; border:none; border-radius:6px; cursor:pointer; }
-        button#generate:hover, button#copyHTML:hover { background:#005bb5; }
+        textarea { width:100%; min-height:200px; margin-top:10px; border-radius:6px; padding:8px; border:1px solid #ccc; font-family:monospace; box-sizing: border-box; font-size: 14px; }
+        button#generate, button#copyHTML { margin-top:10px; padding:12px 24px; font-size:16px; background:green; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; }
+        button#copyHTML { background: #0073e6; }
+        button#generate:hover { background:#006400; }
+        button#copyHTML:hover { background:#005bb5; }
         
-        a#backHome { display:block; text-align:center; margin-top:15px; text-decoration:none; color:#0073e6; font-weight:bold; }
-        a#backHome:hover { color:#005bb5; }
+        a#backHome { display:block; text-align:center; margin-top:15px; text-decoration:none; color:#0073e6; font-weight:bold; padding-bottom: 20px; }
         
-        iframe, img { max-width:100%; }
+        iframe, img { max-width:100%; height: auto; }
         .responsive-video { position:relative; width:100%; padding-bottom:56.25%; margin:10px 0; }
         .responsive-video iframe { position:absolute; top:0; left:0; width:100%; height:100%; }
     </style>
@@ -88,9 +95,7 @@
         <button onclick="wrapCustomBox()">🖌️ Apply Box</button>
         <select onchange="setFontSize(this.value)">
             <option value="">Font Size</option>
-            <option value="1">Very Small</option>
-            <option value="2">Small</option>
-            <option value="3">Normal</option>
+            <option value="3">Normal (18px)</option>
             <option value="4">Medium</option>
             <option value="5">Large</option>
             <option value="6">Very Large</option>
@@ -113,6 +118,20 @@
 <script>
     const editor = document.getElementById('editor');
     const output = document.getElementById('output');
+
+    // 1. FORCED FONT SIZE ON PASTE
+    // This removes "small" styling from text copied from other sites
+    editor.addEventListener('paste', (e) => {
+        setTimeout(() => {
+            const allElements = editor.querySelectorAll('*');
+            allElements.forEach(el => {
+                // If the element has an inline font-size, we override it to 18px
+                if(el.style.fontSize) {
+                    el.style.fontSize = "18px";
+                }
+            });
+        }, 10);
+    });
 
     function format(cmd, val=null){ 
         document.execCommand(cmd, false, val); 
@@ -170,9 +189,12 @@
         }
     }
 
+    // 2. UPDATED GENERATOR
+    // This wraps the output in a div that keeps the font large on your website
     function generateHTML() {
-        // This replaces the PHP POST functionality
-        output.value = editor.innerHTML;
+        const rawContent = editor.innerHTML;
+        const styledOutput = `<div style="font-size: 18px; line-height: 1.6; font-family: Arial, sans-serif;">\n${rawContent}\n</div>`;
+        output.value = styledOutput;
     }
 
     function copyHTML() {
